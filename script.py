@@ -22,10 +22,9 @@ def main():
 
     while(True):
         #Wait until the page is fully loaded
-        driver.implicitly_wait(1)
-        wait = WebDriverWait(driver, 15)
-        wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, 'div.submissionstatustable')))
         driver.implicitly_wait(3)
+        wait = WebDriverWait(driver, 15)
+        wait.until(EC.visibility_of_element_located((By.CSS_SELECTOR, 'div.submissionstatustable')))
 
         #Default score is the maximum if the return is not late
         score = maxScore
@@ -33,7 +32,7 @@ def main():
         #If the student has returned the assignment in text format
         #Need to expand the text field
         try:
-            plusIcon = driver.find_element(By.CSS_SELECTOR, 'i.icon.fa.fa-plus.fa-fw::before')
+            plusIcon = driver.find_element(By.CSS_SELECTOR, 'i.icon.fa.fa-plus.fa-fw[title="View full"][role="img"][aria-label="View full"]')
             plusIcon.click()
         except:
             pass
@@ -43,7 +42,7 @@ def main():
             lateSubmissionString = driver.find_element(By.CLASS_NAME, 'latesubmission')
             strLateSubmissionString = lateSubmissionString.text
             values = [int(s) for s in strLateSubmissionString.split() if s.isdigit()]
-            print(values)
+            
             if("day" in strLateSubmissionString):
                 days = values[0]
                 hours = values[1]
@@ -62,7 +61,7 @@ def main():
         if not userInput: 
             userInput = score
         element = driver.find_element(By.ID, 'id_grade')
-        element.click()
+        element.submit()
         element.send_keys(userInput)
 
         #Wait one second before click (for seeing the score in the input)
