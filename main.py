@@ -29,7 +29,7 @@ def main():
     driver.get(getUrl())
 
     while(True):
-        check = input("Navigate to the review view and press enter: ")
+        check = input("Navigate to the grade view and press enter: ")
         if(check == "exit"):
             break
 
