@@ -20,8 +20,8 @@ def saveUrl():
         #When using for the first time you need to provide url to Moodle
         #And it will be saved in the root of this project in .txt file
         askUrl = input("Give the url to Moodle: ")
-        with open("url.txt", 'w') as tiedosto:
-                tiedosto.write(askUrl)
+        with open("url.txt", 'w') as txtFile:
+                txtFile.write(askUrl)
         return askUrl
 
 def main():
