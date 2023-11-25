@@ -46,8 +46,6 @@ def main():
             checkbox.click()
 
         while(True):
-            #Wait until the page is fully loaded
-            driver.implicitly_wait(delay)
 
             #Default score is the maximum if the return is not late
             score = maxScore
@@ -55,7 +53,7 @@ def main():
             #If the student has returned the assignment in text format
             #Need to expand the text field
             try:
-                wait = WebDriverWait(driver, 2)
+                wait = WebDriverWait(driver, delay)
                 element_locator = (By.CSS_SELECTOR, 'i.icon.fa.fa-plus.fa-fw[title="View full"][role="img"][aria-label="View full"]')
                 plusIcon = wait.until(EC.visibility_of_element_located(element_locator))
                 plusIcon.click()
@@ -64,7 +62,9 @@ def main():
 
             try:
                 #If the student has returned the assignment late
-                lateSubmissionString = driver.find_element(By.CLASS_NAME, 'latesubmission')
+                wait = WebDriverWait(driver, delay)
+                element_locator = (By.CLASS_NAME, 'latesubmission')
+                lateSubmissionString = wait.until(EC.visibility_of_element_located(element_locator))
                 strLateSubmissionString = lateSubmissionString.text
                 values = [int(s) for s in strLateSubmissionString.split() if s.isdigit()]
                 
@@ -81,14 +81,25 @@ def main():
         
             userInput = input("Score (default calculated score is: " + str(score) + "): ")
 
-            if not userInput: 
-                userInput = score
-            elif(userInput == "exit"):
+            userInputScore = 0
+            userInputComment = ""
+
+            if not userInput:
+                userInputScore = score
+            elif("exit" in userInput):
                 break
+            else:
+                userInputScore, userInputComment = userInput.split(" ", 1)
 
             element = driver.find_element(By.ID, 'id_grade')
             element.submit()
-            element.send_keys(userInput)
+            element.send_keys(userInputScore)
+
+            #Add comment if typed in the console
+            if len(userInputComment) > 0: 
+                element = driver.find_element(By.ID, 'id_assignfeedbackcomments_editoreditable')
+                element.submit()
+                element.send_keys(userInputComment)
 
             #Wait one second before click (for seeing the score in the input)
             driver.implicitly_wait(1)
