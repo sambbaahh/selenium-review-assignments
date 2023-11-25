@@ -9,7 +9,7 @@ def calculateLateSubmitScore(maxScore, lateHours):
     return maxScore * (1 - (0.5 / 336) * lateHours)
 
 def getUrl():
-    if(not os.path.exists("url.txt")):
+    if not os.path.exists("url.txt"):
         return saveUrl()
     else:
         with open("url.txt", 'r') as txtFile:
@@ -28,9 +28,9 @@ def main():
     driver = webdriver.Chrome()
     driver.get(getUrl())
 
-    while(True):
+    while True:
         check = input("Navigate to the grade view and press enter: ")
-        if(check == "exit"):
+        if "exit" in check:
             break
 
         delay = input("Enter the delay time between page changes (default delay is 4 sec): ")
@@ -45,7 +45,7 @@ def main():
         if(checkbox.is_enabled()):
             checkbox.click()
 
-        while(True):
+        while True:
 
             #Default score is the maximum if the return is not late
             score = maxScore
@@ -86,7 +86,7 @@ def main():
 
             if not userInput:
                 userInputScore = score
-            elif("exit" in userInput):
+            elif "exit" in userInput:
                 break
             else:
                 userInputScore, userInputComment = userInput.split(" ", 1)
