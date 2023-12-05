@@ -89,7 +89,11 @@ def main():
             elif "exit" in userInput:
                 break
             else:
-                userInputScore, userInputComment = userInput.split(" ", 1)
+                if " " in userInput:
+                    userInputScore, userInputComment = userInput.split(" ", 1)
+                else:
+                    userInputScore = userInput
+                    userInputComment = ""
 
             element = driver.find_element(By.ID, 'id_grade')
             element.submit()
